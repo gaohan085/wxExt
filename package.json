@@ -1,0 +1,27 @@
+{
+  "name": "wx-ext",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.ts --watch ./ -- --parentPid 19848 --name \"www\" --key \"35B7FFA4DCE0B1FB06B1EA7E88E0A08C\" --pcid \"E0878021E39A47C6795A1C6B5596F84F0D0D2D4E10B5998A474BC7A368039095\" --time \"2023-06-01 09:07:32.645\" --user \"\" --binduser \"gaohan085\"",
+    "start": "node app-convert --parentPid 19848 --name \"www\" --key \"35B7FFA4DCE0B1FB06B1EA7E88E0A08C\" --pcid \"E0878021E39A47C6795A1C6B5596F84F0D0D2D4E10B5998A474BC7A368039095\" --time \"2023-06-01 09:07:32.645\" --user \"\" --binduser \"gaohan085\"",
+    "build": "webpack --config webpack.config.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "@types/ws": "^8.5.4",
+    "nodemon": "^2.0.22",
+    "ts-loader": "^9.4.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.85.0",
+    "webpack-cli": "^5.1.1"
+  }
+}
