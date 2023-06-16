@@ -1,4 +1,6 @@
 import WebSocket from "ws";
+import * as log from "./src/log";
+import axios from "axios";
 
 interface MsgObjType {
   _id: number;
@@ -52,23 +54,34 @@ const msgObj: MsgObjType = {
   },
 };
 
-function RunApp() {
+async function RunApp() {
+  const data = (
+    await axios.get<{ [index: string]: string }>(
+      "http://127.0.0.1:8203/ext/www/key.ini"
+    )
+  ).data;
+  log.info(JSON.stringify(data));
+
+  for (const index in data) {
+    app[index] = data[index];
+  }
+
   const url = `ws://127.0.0.1:8202/wx?name=${encodeURIComponent(
     app.name
   )}&key=${app.key}`;
-  console.log("[ info ]" + url);
+  log.info(`[url]: ${url}`);
   const ws = new WebSocket(url);
 
   ws.on("open", () => {
-    console.log("[ info ]Connect sucessfully.");
+    log.info("Connected to websocket server sucessfully.");
   });
 
   ws.on("error", (e) => {
-    console.error("[ ERROR ]" + e);
+    log.error(JSON.stringify(e));
   });
 
   ws.on("close", () => {
-    console.error("[ ERROR ]Connection closed by server");
+    log.error("Connection closed by server");
   });
 
   ws.on("message", (data) => {
@@ -84,7 +97,7 @@ function RunApp() {
         return ws.send(JSON.stringify(obj));
       }
     } catch (e) {
-      console.error("[ ERROR ]" + e);
+      log.error(JSON.stringify(e));
     }
 
     // handleMsg(obj, sendFc);
@@ -97,23 +110,13 @@ function RunApp() {
           obj.req = msgObj.add(resolve, timeout);
           const str = JSON.stringify(obj);
           ws.send(str);
-          console.log("[INFO] Send Message " + str);
+          log.info(`Send Message "${str}"`);
         });
       } catch (e) {
-        console.error("[ ERROR ]" + e);
+        log.error(JSON.stringify(e));
       }
     };
   });
 }
 
-function init() {
-  let args = process.argv,
-    reg;
-  args.forEach((arg, i) => {
-    if ((reg = /^--(.+)$/.exec(arg))) app[reg[1]] = args[++i];
-  });
-  console.log("[ info ]", app);
-
-  RunApp()
-}
-init();
+RunApp()

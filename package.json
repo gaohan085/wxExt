@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.ts --watch ./ -- --parentPid 19848 --name \"www\" --key \"35B7FFA4DCE0B1FB06B1EA7E88E0A08C\" --pcid \"E0878021E39A47C6795A1C6B5596F84F0D0D2D4E10B5998A474BC7A368039095\" --time \"2023-06-01 09:07:32.645\" --user \"\" --binduser \"gaohan085\"",
-    "start": "node app-convert --parentPid 19848 --name \"www\" --key \"35B7FFA4DCE0B1FB06B1EA7E88E0A08C\" --pcid \"E0878021E39A47C6795A1C6B5596F84F0D0D2D4E10B5998A474BC7A368039095\" --time \"2023-06-01 09:07:32.645\" --user \"\" --binduser \"gaohan085\"",
+    "dev": "nodemon app.ts --watch ./ ",
+    "start": "node app-convert ",
     "build": "webpack --config webpack.config.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.4.0",
+    "colors": "^1.4.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {
