@@ -1,19 +1,21 @@
 const path = require("path");
 
 module.exports = {
-  target:"node",
+  target: "node",
   entry: "./app.ts",
   output: {
-    path: path.resolve(__dirname),
-    filename: "app-output.js",
+    path: path.join(__dirname, ".out"),
+    filename: "app.js",
   },
 
-  rules: [
-    {
-      test: /\.ts$/,
-      use: [{ loader: "ts-loader" }],
-    },
-  ],
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: "ts-loader",
+      },
+    ],
+  },
 
   resolve: {
     extensions: [".ts", ".js"],

@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 import * as log from "./src/log";
-import axios from "axios";
+import handleMsg from "./src/handleMsg";
 
 interface MsgObjType {
   _id: number;
@@ -23,7 +23,8 @@ export interface ObjType {
   method?: string;
   msg?: string;
   cb?: string;
-  data?: string | { [index: string]: string | number };
+  data?: string & { [index: string]: string | number };
+  type?: number;
 }
 
 const app: { [index: string]: string } = {};
@@ -43,7 +44,7 @@ const msgObj: MsgObjType = {
   event: console.log,
   req: console.log,
   add: function (cb, timeout) {
-    let id = msgObj.id;
+    const id = msgObj.id;
     this.callback[id] = {
       cb,
       timeout: setTimeout(function () {
@@ -54,18 +55,7 @@ const msgObj: MsgObjType = {
   },
 };
 
-async function RunApp() {
-  const data = (
-    await axios.get<{ [index: string]: string }>(
-      "http://127.0.0.1:8203/ext/www/key.ini"
-    )
-  ).data;
-  log.info(JSON.stringify(data));
-
-  for (const index in data) {
-    app[index] = data[index];
-  }
-
+export async function RunApp(app: { [index: string]: string }) {
   const url = `ws://127.0.0.1:8202/wx?name=${encodeURIComponent(
     app.name
   )}&key=${app.key}`;
@@ -86,37 +76,42 @@ async function RunApp() {
 
   ws.on("message", (data) => {
     try {
-      let obj = JSON.parse(data.toString()) as ObjType;
+      const obj = JSON.parse(data.toString()) as ObjType;
       if (obj.req !== undefined) return msgObj.cb(obj);
       if (obj.cb !== undefined) {
         //cb是服务端请求过来的需要回复,人家等着呢
-        let cbid = obj.cb,
-          method = obj.method;
-        obj = { data: app.data };
-        obj.cb = cbid;
         return ws.send(JSON.stringify(obj));
       }
+      handleMsg(obj, sendFc);
     } catch (e) {
       log.error(JSON.stringify(e));
     }
-
-    // handleMsg(obj, sendFc);
-
-    const sendFc = async (obj: ObjType, timeout: number) => {
-      try {
-        await new Promise((resolve, reject) => {
-          if (!obj || !obj.method)
-            return resolve({ method: "err", msg: "invalid method" });
-          obj.req = msgObj.add(resolve, timeout);
-          const str = JSON.stringify(obj);
-          ws.send(str);
-          log.info(`Send Message "${str}"`);
-        });
-      } catch (e) {
-        log.error(JSON.stringify(e));
-      }
-    };
   });
+
+  const sendFc = async (obj: ObjType, timeout = 1000) => {
+    try {
+      await new Promise((resolve, reject) => {
+        if (!obj || !obj.method)
+          return resolve({ method: "err", msg: "invalid method" });
+        obj.req = msgObj.add(resolve, timeout);
+        const str = JSON.stringify(obj);
+        ws.send(str);
+        log.info(`Send Message "${str}"`);
+      });
+    } catch (e) {
+      log.error(JSON.stringify(e));
+    }
+  };
 }
 
-RunApp()
+function init() {
+  const args = process.argv;
+  let reg;
+  args.forEach((arg, i) => {
+    if ((reg = /^--(.+)$/.exec(arg))) app[reg[1]] = args[++i];
+  });
+  log.info(JSON.stringify(app));
+
+  RunApp(app);
+}
+init();
