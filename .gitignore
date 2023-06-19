@@ -4,3 +4,5 @@ app-output.js
 app.js
 .out/
 app-eg.js
+WxExtApp.exe
+.env

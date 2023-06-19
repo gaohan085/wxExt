@@ -1,5 +1,5 @@
-import { type ObjType } from "../app";
-import * as log from "./log";
+import { type ObjType } from "./app";
+import * as log from "../lib/log";
 import { Method } from "./method";
 
 export default async function handleMsg(

@@ -1,6 +1,6 @@
-import { RunApp } from "./app";
+import { RunApp } from "./src/app";
 import axios from "axios";
-import * as log from "./src/log";
+import * as log from "./lib/log";
 
 async function run() {
   return (

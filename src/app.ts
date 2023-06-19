@@ -1,6 +1,6 @@
 import WebSocket from "ws";
-import * as log from "./src/log";
-import handleMsg from "./src/handleMsg";
+import * as log from "../lib/log";
+import handleMsg from "./handleMsg";
 
 interface MsgObjType {
   _id: number;
@@ -70,8 +70,10 @@ export async function RunApp(app: { [index: string]: string }) {
     log.error(JSON.stringify(e));
   });
 
-  ws.on("close", () => {
-    log.error("Connection closed by server");
+  ws.on("close", (code, reason) => {
+    log.error(
+      `Connection closed by server with code ${code}: ${reason.toLocaleString()}`
+    );
   });
 
   ws.on("message", (data) => {
@@ -90,7 +92,7 @@ export async function RunApp(app: { [index: string]: string }) {
 
   const sendFc = async (obj: ObjType, timeout = 1000) => {
     try {
-      await new Promise((resolve, reject) => {
+      await new Promise((resolve) => {
         if (!obj || !obj.method)
           return resolve({ method: "err", msg: "invalid method" });
         obj.req = msgObj.add(resolve, timeout);

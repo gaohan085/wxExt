@@ -446,4 +446,134 @@ export const Method = {
       pid: 0,
     };
   },
+
+  /**
+   * 转发图片
+   * @param wxid
+   * @param imgPath 图片本地路径, 自动下载的路径通过xmlinfo推送来获取
+   * @returns
+   */
+  sendImage: (wxid: string, imgPath: string) => {
+    return {
+      method: "sendImage",
+      wxid,
+      img: imgPath,
+      imgType: "file",
+      pid: 0,
+    };
+  },
+
+  /**
+   * 发送动态表情
+   * @param wxid
+   * @param path 本地路径
+   * @returns
+   */
+  sendEmoji: (wxid: string, path: string) => {
+    return {
+      method: "sendEmoji",
+      wxid,
+      path, //本地路径
+      pid: 0,
+    };
+  },
+
+  /**
+   * 转发动态表情
+   * @param wxid
+   * @param xml type=47收到的msg中的xml 参考接收到的xml
+   * @returns
+   */
+  sendEmojiForward: (wxid: string, xml: string) => {
+    return {
+      method: "sendEmojiForward",
+      wxid,
+      xml,
+      pid: 0,
+    };
+  },
+
+  /**
+   * 转发文章链接小程序
+   * @param wxid
+   * @param xml type=49收到的msg中的xml,参考接收到的xml
+   * @returns
+   */
+  sendAppmsgForward: (wxid: string, xml: string) => {
+    return {
+      method: "sendEmojiForward",
+      wxid,
+      xml,
+      pid: 0,
+    };
+  },
+
+  /**
+   * 发送语音通话 紧急事件可以通过发送语音通话实现
+   * @param wxid
+   * @returns
+   */
+  callVoipAudio: (wxid: string) => {
+    return { method: "callVoipAudio", wxid };
+  },
+
+  /**
+   * 清除全部聊天记录
+   * @returns
+   */
+  clearMsgList: () => {
+    return {
+      method: "ClearMsgList",
+      pid: -1, //全部
+    };
+  },
+
+  /**
+   * 获取文件数据
+   * @param filePath
+   * @returns
+   */
+  getFile: (filePath: string) => {
+    return { method: "getfile", filePath };
+  },
+
+  /**
+   * 保存数据(可选type:base64,hex,url,默认为保存文本)
+   * @param path
+   * @param data
+   * @returns
+   */
+  saveFile: (path: string, data: string) => {
+    return {
+      method: "savefile",
+      path,
+      data,
+    };
+  },
+
+  /**
+   * 保存图片
+   * @param url
+   * @returns
+   */
+  saveimg: (url: string) => {
+    return {
+      method: "saveimg",
+      type: "url",
+      data: url,
+    };
+  },
+
+  /**
+   * 网络获取详细信息,昵称 头像
+   * @param wxid
+   * @returns
+   */
+  netGetUser: (wxid: string[]) => {
+    return {
+      method: "netGetUser",
+      wxid: wxid.join("|"),
+      pid: 0,
+    };
+  },
 };

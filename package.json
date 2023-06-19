@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon index.ts --watch ./ ",
     "start": "node .out/app.js ",
-    "build": "webpack --mode=production --config=./webpack.config.js"
+    "build": "webpack --mode=production --config=./webpack.config.js",
+    "test": "mocha -r ts-node/register -R spec ./test/**.spec.ts --exit"
   },
   "keywords": [],
   "author": "",
@@ -14,14 +15,20 @@
   "dependencies": {
     "axios": "^1.4.0",
     "colors": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "mongoose": "^7.3.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^20.2.5",
     "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
+    "chai": "^4.3.7",
     "eslint": "^8.43.0",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",
