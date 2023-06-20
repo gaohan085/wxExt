@@ -13,4 +13,7 @@ const memberSchema = new Schema<MemberInterface>({
   joinDate: { type: Date, default: new Date() },
 });
 
-export const Member = model("Member", memberSchema);
+export const MemberModel = model("Member", memberSchema);
+export const CreateMember = async (member: MemberInterface) => {
+  await MemberModel.create({ ...member });
+};

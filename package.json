@@ -7,7 +7,7 @@
     "dev": "nodemon index.ts --watch ./ ",
     "start": "node .out/app.js ",
     "build": "webpack --mode=production --config=./webpack.config.js",
-    "test": "mocha -r ts-node/register -R spec ./test/**.spec.ts --exit"
+    "test": "mocha -r ts-node/register -R spec ./**/**/**.spec.ts --exit"
   },
   "keywords": [],
   "author": "",
