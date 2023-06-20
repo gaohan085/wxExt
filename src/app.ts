@@ -107,6 +107,7 @@ export async function RunApp(app: { [index: string]: string }) {
 }
 
 function init() {
+  log.info("Wechat extension started!")
   const args = process.argv;
   let reg;
   args.forEach((arg, i) => {

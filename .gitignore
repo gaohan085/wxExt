@@ -6,3 +6,4 @@ app.js
 app-eg.js
 WxExtApp.exe
 .env
+*.log

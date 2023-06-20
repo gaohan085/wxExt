@@ -18,5 +18,6 @@ run()
       app[index] = data[index];
     }
     RunApp(app);
+    log.info(process.env.NODE_ENV as string);
   })
   .catch((e) => log.error(JSON.stringify(e)));

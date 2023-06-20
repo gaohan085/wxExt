@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.ts --watch ./ ",
+    "dev": "cross-env NODE_ENV=development nodemon index.ts --watch ./ ",
     "start": "node .out/app.js ",
     "build": "webpack --mode=production --config=./webpack.config.js",
     "test": "mocha -r ts-node/register -R spec ./**/**/**.spec.ts --exit"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "gaohan085@gmail.com",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.4.0",
     "colors": "^1.4.0",
@@ -27,7 +27,9 @@
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
     "chai": "^4.3.7",
+    "cross-env": "^7.0.3",
     "eslint": "^8.43.0",
+    "eslint-plugin-import": "^2.27.5",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "ts-loader": "^9.4.3",
@@ -39,16 +41,31 @@
   "eslintConfig": {
     "extends": [
       "eslint:recommended",
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "plugin:import/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
-      "@typescript-eslint"
+      "@typescript-eslint",
+      "import"
     ],
     "root": true,
     "ignorePatterns": [
       "webpack.config.js"
-    ]
+    ],
+    "rules": {
+      "import/no-unresolved": [
+        0,
+        {
+          "commonjs": true,
+          "amd": true
+        }
+      ],
+      "import/named": 2,
+      "import/namespace": 2,
+      "import/default": 2,
+      "import/export": 2
+    }
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
