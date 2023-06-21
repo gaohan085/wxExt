@@ -3,12 +3,14 @@ import { Schema, model } from "mongoose";
 
 type MsgType = {
   fromid: string;
+  nickName: string;
   msg: string;
   time: Date;
 };
 
 const MsgSchema = new Schema<MsgType>({
   fromid: { type: String, required: true },
+  nickName: String,
   msg: String,
   time: { type: Date, default: new Date() },
 });
@@ -17,8 +19,10 @@ export const MsgModel = model("Msg", MsgSchema);
 
 /**
  * 在数据库创建聊天记录
- * @param obj 
+ * @param obj
  */
-export async function createMsgRec(obj: ObjType) {
-  await MsgModel.create({ fromid: obj.data?.fromid, msg: obj.data?.msg });
+export async function MsgCreateRec(obj: ObjType) {
+  return await MsgModel.create({
+    ...obj,
+  });
 }

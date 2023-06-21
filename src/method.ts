@@ -171,7 +171,7 @@ export const Method = {
 
   /**
    * 接受转账
-   * @param wxid
+   * @param wxid 发起转账方id
    * @param transferid
    * @returns
    */
@@ -574,6 +574,14 @@ export const Method = {
       method: "netGetUser",
       wxid: wxid.join("|"),
       pid: 0,
+    };
+  },
+
+  tips: (title: string, text: string) => {
+    return {
+      method: "tips",
+      title,
+      text,
     };
   },
 };

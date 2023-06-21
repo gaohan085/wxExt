@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 import * as log from "../lib/log";
-import handleMsg from "./handleMsg";
+import handleMsg from "./handle-msg";
 
 interface MsgObjType {
   _id: number;
@@ -23,7 +23,9 @@ export interface ObjType {
   method?: string;
   msg?: string;
   cb?: string;
-  data?: string & { [index: string]: string | number };
+  data?: string & { fromid?: string; toid?: string; msg?: string } & {
+    [index: string]: string;
+  };
   type?: number;
 }
 
@@ -84,13 +86,13 @@ export async function RunApp(app: { [index: string]: string }) {
         //cb是服务端请求过来的需要回复,人家等着呢
         return ws.send(JSON.stringify(obj));
       }
-      handleMsg(obj, sendFc);
+      handleMsg(obj, sendFunc);
     } catch (e) {
       log.error(JSON.stringify(e));
     }
   });
 
-  const sendFc = async (obj: ObjType, timeout = 1000) => {
+  const sendFunc = async (obj: ObjType, timeout = 1000) => {
     try {
       await new Promise((resolve) => {
         if (!obj || !obj.method)
@@ -107,7 +109,8 @@ export async function RunApp(app: { [index: string]: string }) {
 }
 
 function init() {
-  log.info("Wechat extension started!")
+  log.info("==============================================================");
+  log.info("Wechat extension started!");
   const args = process.argv;
   let reg;
   args.forEach((arg, i) => {

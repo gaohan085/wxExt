@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon index.ts --watch ./ ",
-    "start": "node .out/app.js ",
+    "start": "cross-env NODE_ENV=development node .out/app.js ",
     "build": "webpack --mode=production --config=./webpack.config.js",
     "test": "mocha -r ts-node/register -R spec ./**/**/**.spec.ts --exit"
   },
@@ -16,6 +16,7 @@
     "axios": "^1.4.0",
     "colors": "^1.4.0",
     "dotenv": "^16.3.1",
+    "fast-xml-parser": "^4.2.4",
     "mongoose": "^7.3.0",
     "ws": "^8.13.0"
   },
