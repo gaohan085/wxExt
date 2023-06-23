@@ -2,7 +2,6 @@ import "dotenv/config";
 import { ObjType } from "../app";
 import * as database from "../../database";
 import { Method } from "../method";
-import { log } from "../../lib";
 
 interface MongooseErrorType extends ErrorConstructor {
   code: number;

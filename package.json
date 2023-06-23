@@ -2,7 +2,7 @@
   "name": "wx-ext",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/app.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon index.ts --watch ./ ",
     "start": "cross-env NODE_ENV=development node .out/app.js ",
@@ -10,7 +10,11 @@
     "test": "mocha -r ts-node/register -R spec ./**/**/**.spec.ts --exit",
     "lint": "eslint --fix ./"
   },
-  "keywords": ["wechat", "wechatbot", "wechatAutoReply"],
+  "keywords": [
+    "wechat",
+    "wechatbot",
+    "wechatAutoReply"
+  ],
   "author": "gaohan085@gmail.com",
   "license": "MIT",
   "dependencies": {
