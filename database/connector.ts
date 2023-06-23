@@ -9,13 +9,20 @@ if (dbUrl === undefined) {
 }
 
 mongoose.connect(dbUrl);
+switch (process.env.NODE_ENV) {
+  case "development":
+    mongoose.set("debug", { shell: true });
+    break;
+  default:
+    break;
+}
 const db = mongoose.connection;
 
 db.once("open", () => {
   log.warn("MongoDB connection established!");
 });
 db.on("error", (e) => {
-  log.error(e.message);
+  log.warn(e);
   process.exit(1);
 });
 

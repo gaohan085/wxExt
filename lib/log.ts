@@ -17,7 +17,7 @@ const logError = console.error;
 export const silly = (msg: string) => {
   switch (process.env.NODE_ENV as string) {
     case "development":
-      log(colors.rainbow(`[silly] ${msg}`));
+      log(colors.rainbow(`${new Date().toLocaleString()} [silly] ${msg}`));
       break;
     default:
       writeLog(`[silly] ${msg}`);
@@ -27,7 +27,7 @@ export const silly = (msg: string) => {
 export const input = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      log(colors.grey(`[input] ${msg}`));
+      log(colors.grey(`${new Date().toLocaleString()} [input] ${msg}`));
       break;
     default:
       writeLog(`[input] ${msg}`);
@@ -37,7 +37,7 @@ export const input = (msg: string) => {
 export const verbose = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      log(colors.cyan(`[verbose] ${msg}`));
+      log(colors.cyan(`${new Date().toLocaleString()} [verbose] ${msg}`));
       break;
     default:
       writeLog(`[verbose] ${msg}`);
@@ -47,7 +47,7 @@ export const verbose = (msg: string) => {
 export const prompt = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      log(colors.grey(`[prompt] ${msg}`));
+      log(colors.grey(`${new Date().toLocaleString()} [prompt] ${msg}`));
       break;
     default:
       writeLog(`[prompt] ${msg}`);
@@ -57,7 +57,7 @@ export const prompt = (msg: string) => {
 export const info = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      log(colors.magenta(`[info] ${msg}`));
+      log(colors.magenta(`${new Date().toLocaleString()} [info] ${msg}`));
       break;
     default:
       writeLog(`[info] ${msg}`);
@@ -67,7 +67,7 @@ export const info = (msg: string) => {
 export const data = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      log(colors.gray(`[data] ${msg}`));
+      log(colors.gray(`${new Date().toLocaleString()} [data] ${msg}`));
       break;
     default:
       writeLog(`[data] ${msg}`);
@@ -77,7 +77,7 @@ export const data = (msg: string) => {
 export const help = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      log(colors.cyan(`[help] ${msg}`));
+      log(colors.cyan(`${new Date().toLocaleString()} [help] ${msg}`));
       break;
     default:
       writeLog(`[help] ${msg}`);
@@ -87,7 +87,7 @@ export const help = (msg: string) => {
 export const warn = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      log(colors.yellow(`[warn] ${msg}`));
+      log(colors.yellow(`${new Date().toLocaleString()} [warn] ${msg}`));
       break;
     default:
       writeLog(`[warn] ${msg}`);
@@ -97,7 +97,7 @@ export const warn = (msg: string) => {
 export const debug = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      log(colors.blue(`[debug] ${msg}`));
+      log(colors.blue(`${new Date().toLocaleString()} [debug] ${msg}`));
       break;
     default:
       writeLog(`[debug] ${msg}`);
@@ -107,7 +107,7 @@ export const debug = (msg: string) => {
 export const error = (msg: string) => {
   switch (process.env.NODE_ENV) {
     case "development":
-      logError(colors.red(`[error] ${msg}`));
+      logError(colors.red(`${new Date().toLocaleString()} [error] ${msg}`));
       break;
     default:
       writeLog(`[error] ${msg}`);

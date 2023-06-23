@@ -1,6 +1,18 @@
+import "dotenv/config";
 import WebSocket from "ws";
 import * as log from "../lib/log";
 import handleMsg from "./handle-msg";
+
+const adminWxid = process.env.admin_wxid;
+const dbUrl = process.env.db_url;
+if (!adminWxid) {
+  log.error("admin_wxid field not defined in .env file");
+  process.exit(1);
+}
+if (!dbUrl) {
+  log.error("db_url field not defined in .env file");
+  process.exit(1);
+}
 
 interface MsgObjType {
   _id: number;
@@ -78,7 +90,7 @@ export async function RunApp(app: { [index: string]: string }) {
     );
   });
 
-  ws.on("message", (data) => {
+  ws.on("message", async (data) => {
     try {
       const obj = JSON.parse(data.toString()) as ObjType;
       if (obj.req !== undefined) return msgObj.cb(obj);
@@ -86,7 +98,7 @@ export async function RunApp(app: { [index: string]: string }) {
         //cb是服务端请求过来的需要回复,人家等着呢
         return ws.send(JSON.stringify(obj));
       }
-      handleMsg(obj, sendFunc);
+      await handleMsg(obj, sendFunc);
     } catch (e) {
       log.error(JSON.stringify(e));
     }

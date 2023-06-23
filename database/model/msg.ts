@@ -23,6 +23,8 @@ export const MsgModel = model("Msg", MsgSchema);
  */
 export async function MsgCreateRec(obj: ObjType) {
   return await MsgModel.create({
-    ...obj,
+    fromid: obj.data?.fromid,
+    nickName: obj.data?.nickName,
+    msg: obj.data?.msg,
   });
 }
