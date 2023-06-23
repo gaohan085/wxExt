@@ -1,18 +1,17 @@
 import { Schema, model } from "mongoose";
-import { log } from "../../lib";
 
-type keywords = {
+type Keywords = {
   keyword: string;
   keywordReply: string;
 };
 
-const keywordSchema = new Schema<keywords>({
+const keywordSchema = new Schema<Keywords>({
   keyword: { type: String, unique: true, required: true },
   keywordReply: { type: String, required: true },
 });
 
-export const keywordModel = model("keyword", keywordSchema);
-export const keywordCreate = async (keyword: keywords) => {
+export const keywordModel = model("Keyword", keywordSchema);
+export const keywordCreate = async (keyword: Keywords) => {
   return await keywordModel.create({ ...keyword });
 };
 
@@ -32,8 +31,6 @@ export async function QueryAndDel(keyword: string) {
 }
 
 export async function QueryAndUpdate(keyword: string, keywordReply: string) {
-  log.warn(keyword);
-  log.warn(keywordReply);
   await keywordModel.findOneAndUpdate(
     { keyword },
     { keyword: keyword, keywordReply: keywordReply },

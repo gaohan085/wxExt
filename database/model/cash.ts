@@ -1,21 +1,21 @@
 import { model, Schema } from "mongoose";
 
-type cash = {
+type Cash = {
   payerWxid: string;
   payerNickName: string;
   transferMount: number;
-  date?: Date;
+  time: Date;
 };
 
-const cashSchema = new Schema<cash>({
+const cashSchema = new Schema<Cash>({
   payerWxid: { type: String, required: true },
   payerNickName: String,
-  transferMount: { type: Number },
-  date: { type: Date, default: new Date() },
+  transferMount: Number,
+  time: { type: Date, default: new Date() },
 });
 
-export const CashModel = model("cash", cashSchema);
+export const CashModel = model("Cash", cashSchema);
 
-export const CashAddRecord = async (cashRec: cash) => {
+export const CashAddRecord = async (cashRec: Omit<Cash, "time">) => {
   return await CashModel.create({ ...cashRec });
 };
