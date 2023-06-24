@@ -14,7 +14,7 @@ export async function msgHandler(
   await database.model.msg.MsgCreateRec(obj);
   const keywords = await database.model.keyword.keywordModel.find().exec();
   const msg = obj.data?.msg as string;
-  const adminWxid = process.env.admin_wxid;
+  const adminWxid = process.env.ADMIN_WXID;
 
   const keywordAdd = /添加 (.{1,9}) (.{1,300})/.exec(msg);
   const keywordDel = /删除 (.{1,9})/.exec(msg);

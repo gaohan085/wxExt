@@ -2,13 +2,9 @@ import "dotenv/config";
 import mongoose from "mongoose";
 import * as log from "../lib/log";
 
-const dbUrl = process.env.db_url;
-if (dbUrl === undefined) {
-  log.error("Invalid db connection url in .env");
-  process.exit(1);
-}
+const dbUrl = process.env.DB_URL;
 
-mongoose.connect(dbUrl);
+mongoose.connect(dbUrl as string);
 switch (process.env.NODE_ENV) {
   case "development":
     mongoose.set("debug", { shell: true });

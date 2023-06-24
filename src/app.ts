@@ -4,14 +4,12 @@ import { log } from "../lib";
 import handleMsg from "./handle-msg";
 import { connection } from "../database";
 
-const adminWxid = process.env.admin_wxid;
-const dbUrl = process.env.db_url;
-if (!adminWxid) {
-  log.error("admin_wxid field not defined in .env file");
-  process.exit(1);
-}
-if (!dbUrl) {
-  log.error("db_url field not defined in .env file");
+const { ADMIN_WXID, DB_URL, REMOTE_ADDRESS } = process.env;
+
+if (!ADMIN_WXID || !DB_URL || !REMOTE_ADDRESS) {
+  log.error(
+    "Please define 'ADMIN_WXID', 'DB_URL', 'REMOTE_ADDRESS' field in .env file"
+  );
   process.exit(1);
 }
 
@@ -71,9 +69,9 @@ const msgObj: MsgObjType = {
 };
 
 export async function RunApp(app: { [index: string]: string }) {
-  const url = `ws://${process.env.REMOTE_ADDRESS}:8202/wx?name=${encodeURIComponent(
-    app.name
-  )}&key=${app.key}`;
+  const url = `ws://${
+    process.env.REMOTE_ADDRESS
+  }:8202/wx?name=${encodeURIComponent(app.name)}&key=${app.key}`;
   log.info(`[url]: ${url}`);
   const ws = new WebSocket(url);
 
