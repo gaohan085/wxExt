@@ -1,2 +1,2 @@
-export { db } from "./connector";
+export { connection } from "./connector";
 export * as model from "./model";

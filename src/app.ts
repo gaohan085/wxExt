@@ -1,7 +1,8 @@
 import "dotenv/config";
 import WebSocket from "ws";
-import * as log from "../lib/log";
+import { log } from "../lib";
 import handleMsg from "./handle-msg";
+import { connection } from "../database";
 
 const adminWxid = process.env.admin_wxid;
 const dbUrl = process.env.db_url;
@@ -70,7 +71,7 @@ const msgObj: MsgObjType = {
 };
 
 export async function RunApp(app: { [index: string]: string }) {
-  const url = `ws://127.0.0.1:8202/wx?name=${encodeURIComponent(
+  const url = `ws://${process.env.REMOTE_ADDRESS}:8202/wx?name=${encodeURIComponent(
     app.name
   )}&key=${app.key}`;
   log.info(`[url]: ${url}`);
@@ -120,7 +121,7 @@ export async function RunApp(app: { [index: string]: string }) {
   };
 }
 
-function init() {
+async function init() {
   log.info("==============================================================");
   log.info("Wechat extension started!");
   const args = process.argv;
@@ -129,6 +130,13 @@ function init() {
     if ((reg = /^--(.+)$/.exec(arg))) app[reg[1]] = args[++i];
   });
   log.info(JSON.stringify(app));
+
+  if (process.env.NODE_ENV === "development") {
+    process.on("SIGINT", async () => {
+      await connection.dropDatabase();
+      process.exit();
+    });
+  }
 
   RunApp(app);
 }

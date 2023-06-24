@@ -16,14 +16,14 @@ switch (process.env.NODE_ENV) {
   default:
     break;
 }
-const db = mongoose.connection;
+const connection = mongoose.connection;
 
-db.once("open", () => {
+connection.once("open", () => {
   log.warn("MongoDB connection established!");
 });
-db.on("error", (e) => {
+connection.on("error", (e) => {
   log.warn(e);
   process.exit(1);
 });
 
-export { db };
+export { connection };

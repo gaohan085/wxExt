@@ -1,11 +1,12 @@
 import { RunApp } from "./src/app";
 import axios from "axios";
 import * as log from "./lib/log";
+import "dotenv/config"
 
 async function run() {
   return (
     await axios.get<{ [index: string]: string }>(
-      "http://127.0.0.1:8203/ext/www/key.ini"
+      `http://${process.env.REMOTE_ADDRESS}:8203/ext/www/key.ini`
     )
   ).data;
 }
