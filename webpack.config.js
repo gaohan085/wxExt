@@ -6,7 +6,7 @@ const configNode = Object.assign(
     target: "node",
     entry: "./src/app.ts",
     output: {
-      path: path.join(__dirname, ".out"),
+      path: path.join(__dirname, ".dist"),
       filename: "app.js",
     },
 
