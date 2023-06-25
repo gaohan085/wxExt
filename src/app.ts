@@ -134,6 +134,10 @@ async function init() {
       await connection.dropDatabase();
       process.exit();
     });
+
+    process.once("SIGHUP", async () => {
+      await connection.dropDatabase();
+    });
   }
 
   RunApp(app);

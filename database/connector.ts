@@ -4,7 +4,11 @@ import * as log from "../lib/log";
 
 const dbUrl = process.env.DB_URL;
 
-mongoose.connect(dbUrl as string);
+mongoose.connect(
+  `${dbUrl as string}${
+    process.env.NODE_ENV === "test" ? Math.floor(Math.random() * 1000) : ""
+  }`
+);
 switch (process.env.NODE_ENV) {
   case "development":
     mongoose.set("debug", { shell: true });

@@ -34,6 +34,5 @@ export async function QueryAndUpdate(keyword: string, keywordReply: string) {
   await keywordModel.findOneAndUpdate(
     { keyword },
     { keyword: keyword, keywordReply: keywordReply },
-    { new: true }
   ).exec();
 }

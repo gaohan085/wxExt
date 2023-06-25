@@ -36,6 +36,9 @@ optionalDependencies:
     version: 6.0.3
 
 devDependencies:
+  '@faker-js/faker':
+    specifier: ^8.0.2
+    version: 8.0.2
   '@types/chai':
     specifier: ^4.3.5
     version: 4.3.5
@@ -45,6 +48,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.3.1
     version: 20.3.1
+  '@types/node-schedule':
+    specifier: ^2.1.0
+    version: 2.1.0
   '@types/ws':
     specifier: ^8.5.5
     version: 8.5.5
@@ -137,6 +143,11 @@ packages:
   /@eslint/js@8.43.0:
     resolution: {integrity: sha512-s2UHCoiXfxMvmfzqoN+vrQ84ahUSYde9qNO1MdxmoEhyHWsfmwOpFlwYV+ePJEVc7gFnATGUi376WowX1N7tFg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: true
+
+  /@faker-js/faker@8.0.2:
+    resolution: {integrity: sha512-Uo3pGspElQW91PCvKSIAXoEgAUlRnH29sX2/p89kg7sP1m2PzCufHINd0FhTXQf6DYGiUlVncdSPa2F9wxed2A==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: true
 
   /@humanwhocodes/config-array@0.11.10:
@@ -281,6 +292,12 @@ packages:
 
   /@types/mocha@10.0.1:
     resolution: {integrity: sha512-/fvYntiO1GeICvqbQ3doGDIP97vWmvFt83GKguJ6prmQM2iXZfFcq6YE8KteFyRtX2/h5Hf91BYvPodJKFYv5Q==}
+    dev: true
+
+  /@types/node-schedule@2.1.0:
+    resolution: {integrity: sha512-NiTwl8YN3v/1YCKrDFSmCTkVxFDylueEqsOFdgF+vPsm+AlyJKGAo5yzX1FiOxPsZiN6/r8gJitYx2EaSuBmmg==}
+    dependencies:
+      '@types/node': 20.3.1
     dev: true
 
   /@types/node@20.3.1:

@@ -4,10 +4,10 @@
   "description": "",
   "main": "./src/app.ts",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon index.ts --watch ./ ",
+    "dev": "cross-env NODE_ENV=development nodemon index.ts --watch ./ --ignore './test/*.spec.ts' --signal SIGHUP",
     "start": "cross-env NODE_ENV=development node .out/app.js ",
     "build": "webpack --mode=production --config=./webpack.config.js",
-    "test": "mocha -r ts-node/register -R spec ./**/**/**.spec.ts --exit",
+    "test": "cross-env NODE_ENV=test mocha -r ts-node/register -R spec ./test/index.spec.ts --exit",
     "lint": "eslint --fix ./"
   },
   "keywords": [
@@ -27,9 +27,11 @@
     "ws": "^8.13.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@types/chai": "^4.3.5",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.3.1",
+    "@types/node-schedule": "^2.1.0",
     "@types/ws": "^8.5.5",
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",

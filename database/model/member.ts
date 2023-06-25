@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-type MemberInterface = {
+export type MemberInterface = {
   nickName: string;
   wxid: string;
   joinDate?: Date;
