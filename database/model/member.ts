@@ -10,7 +10,9 @@ export type MemberInterface = {
 const memberSchema = new Schema<MemberInterface>({
   nickName: String,
   wxid: { unique: true, type: String, required: true },
-  joinDate: { type: Date, default: new Date() },
+  joinDate: { type: Date, default: () => {
+    return new Date();
+  } },
 });
 
 export const MemberModel = model("Member", memberSchema);

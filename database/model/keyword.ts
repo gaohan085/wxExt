@@ -3,11 +3,18 @@ import { Schema, model } from "mongoose";
 type Keywords = {
   keyword: string;
   keywordReply: string;
+  time?: Date;
 };
 
 const keywordSchema = new Schema<Keywords>({
   keyword: { type: String, unique: true, required: true },
   keywordReply: { type: String, required: true },
+  time: {
+    type: Date,
+    default: () => {
+      return new Date();
+    },
+  },
 });
 
 export const keywordModel = model("Keyword", keywordSchema);
@@ -31,8 +38,10 @@ export async function QueryAndDel(keyword: string) {
 }
 
 export async function QueryAndUpdate(keyword: string, keywordReply: string) {
-  await keywordModel.findOneAndUpdate(
-    { keyword },
-    { keyword: keyword, keywordReply: keywordReply },
-  ).exec();
+  await keywordModel
+    .findOneAndUpdate(
+      { keyword },
+      { keyword: keyword, keywordReply: keywordReply }
+    )
+    .exec();
 }

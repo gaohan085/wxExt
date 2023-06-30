@@ -12,7 +12,12 @@ const MsgSchema = new Schema<MsgType>({
   fromid: { type: String, required: true },
   nickName: String,
   msg: String,
-  time: { type: Date, default: new Date() },
+  time: {
+    type: Date,
+    default: () => {
+      return new Date();
+    },
+  },
 });
 
 export const MsgModel = model("Msg", MsgSchema);

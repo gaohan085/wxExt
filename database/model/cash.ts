@@ -11,7 +11,12 @@ const cashSchema = new Schema<Cash>({
   payerWxid: { type: String, required: true },
   payerNickName: String,
   transferMount: Number,
-  time: { type: Date, default: new Date() },
+  time: {
+    type: Date,
+    default: () => {
+      return new Date();
+    },
+  },
 });
 
 export const CashModel = model("Cash", cashSchema);

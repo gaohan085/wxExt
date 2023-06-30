@@ -4,12 +4,19 @@ export type DialogState = {
   nickName: string;
   wxid: string;
   dialogState?: "auto" | "artificial";
+  time?: Date;
 };
 
 const dialogSchema = new Schema<DialogState>({
   nickName: { type: String, required: true },
   wxid: { type: String, required: true, unique: true },
   dialogState: { type: String, default: "auto" },
+  time: {
+    type: Date,
+    default: () => {
+      return new Date();
+    },
+  },
 });
 
 export const dialogStateModel = model("dialogState", dialogSchema);
@@ -39,7 +46,6 @@ export async function DialogQuery(
 }
 
 export async function DialogQueueLength() {
-  return (
-    await dialogStateModel.find({ dialogState: "artificial" }).exec()
-  ).length;
+  return (await dialogStateModel.find({ dialogState: "artificial" }).exec())
+    .length;
 }
