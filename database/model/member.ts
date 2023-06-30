@@ -4,7 +4,7 @@ export type MemberInterface = {
   nickName: string;
   wxid: string;
   joinDate?: Date;
-  role: "administrator" | "paid member" | "permanent membership";
+  role: "administrator" | "paid member" | "permanent member";
 };
 
 const memberSchema = new Schema<MemberInterface>({

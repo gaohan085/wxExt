@@ -1,14 +1,34 @@
 import "dotenv/config";
 import WebSocket from "ws";
-import { log } from "../lib";
+import { log, schedule } from "../lib";
 import handleMsg from "./handle-msg";
 import { connection } from "../database";
 
-const { ADMIN_WXID, DB_URL, REMOTE_ADDRESS } = process.env;
+export type SendFunc = (obj: ObjType, timeout?: number) => Promise<void>;
 
-if (!ADMIN_WXID || !DB_URL || !REMOTE_ADDRESS) {
+const {
+  ADMIN_WXID,
+  DB_URL,
+  REMOTE_ADDRESS,
+  HISTORY_PACKAGE_PRICE,
+  PERMENENT_MEMBER_PRICE,
+  NEWS_PRICE,
+  ARTIFICIAL_START,
+  ARTIFICIAL_END,
+} = process.env;
+
+if (
+  !ADMIN_WXID ||
+  !DB_URL ||
+  !REMOTE_ADDRESS ||
+  !HISTORY_PACKAGE_PRICE ||
+  !PERMENENT_MEMBER_PRICE ||
+  !NEWS_PRICE ||
+  !ARTIFICIAL_START ||
+  !ARTIFICIAL_END
+) {
   log.error(
-    "Please define 'ADMIN_WXID', 'DB_URL', 'REMOTE_ADDRESS' field in .env file"
+    "Please define 'ADMIN_WXID', 'DB_URL', 'REMOTE_ADDRESS','PERMENENT_MEMBER_PRICE','HISTORY_PACKAGE_PRICE' 'NEWS_PRICE', 'ARTIFICIAL_START','ARTIFICIAL_END' field in .env file"
   );
   process.exit(1);
 }
@@ -117,6 +137,9 @@ export async function RunApp(app: { [index: string]: string }) {
       log.error(JSON.stringify(e));
     }
   };
+
+  schedule.scheduleArchive(sendFunc);
+  schedule.scheduleArchiveToday(sendFunc);
 }
 
 async function init() {

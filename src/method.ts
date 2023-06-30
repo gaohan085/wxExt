@@ -441,7 +441,7 @@ export const Method = {
     return {
       method: "sendText",
       wxid,
-      msg,
+      msg: `${msg}\n\n--此消息为自动回复，查看帮助请发送【帮助】，需要人工服务请发送【人工】，人工服务时间为9:00-17:30`,
       atid: atid.join("|"),
       pid: 0,
     };
@@ -582,6 +582,21 @@ export const Method = {
       method: "tips",
       title,
       text,
+    };
+  },
+
+  /**
+   * 发送文件
+   * @param wxid 
+   * @param file 文件绝对路径
+   * @returns 
+   */
+  sendFile: (wxid: string, file: string) => {
+    return {
+      method: "sendFile",
+      wxid,
+      file,
+      fileType: "file",
     };
   },
 };

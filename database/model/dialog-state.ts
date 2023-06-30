@@ -19,7 +19,9 @@ export async function CreateDialogState(dialog: DialogState) {
 }
 
 export const UpdateDialogState = async (
-  filter: Omit<DialogState, "wxid"> | Omit<DialogState, "nickName">,
+  filter:
+    | Omit<DialogState, "wxid" | "dialogState">
+    | Omit<DialogState, "nickName" | "dialogState">,
   update?: DialogState
 ) => {
   //[o] TEST
@@ -29,7 +31,15 @@ export const UpdateDialogState = async (
 };
 
 export async function DialogQuery(
-  filter: Omit<DialogState, "wxid"> | Omit<DialogState, "nickName">
+  filter:
+    | Omit<DialogState, "wxid" | "dialogState">
+    | Omit<DialogState, "nickName" | "dialogState">
 ) {
   return await dialogStateModel.findOne(filter).exec();
+}
+
+export async function DialogQueueLength() {
+  return (
+    await dialogStateModel.find({ dialogState: "artificial" }).exec()
+  ).length;
 }
