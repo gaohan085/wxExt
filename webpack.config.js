@@ -14,7 +14,8 @@ const configNode = Object.assign(
       rules: [
         {
           test: /\.ts$/,
-          use: "ts-loader",
+          exclude: /(node_modules)/,
+          use: "swc-loader",
         },
       ],
     },
