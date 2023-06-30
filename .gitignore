@@ -8,3 +8,4 @@ WxExtApp.exe
 .env
 *.log
 cash-t.ts
+*.zip
