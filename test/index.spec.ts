@@ -1,12 +1,14 @@
 import dialogStateTest from "./dialog-state.spec";
-import databaseTest from "./database.spec";
+import memberTest from "./database.member.spec";
 import { connection } from "../database/connector";
+import cashTest from "./database.cash.spec";
 
 describe("Test", () => {
   dialogStateTest();
-  databaseTest();
+  memberTest();
+  cashTest();
 
-  after(() => {
-    connection.dropDatabase();
+  after(async () => {
+    await connection.dropDatabase();
   });
 });

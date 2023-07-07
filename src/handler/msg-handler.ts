@@ -27,10 +27,12 @@ export async function msgHandler(
         Method.sendText(
           obj.data?.fromid as string,
           (obj.data?.fromid as string) === adminWxid
-            ? `关键词回复\n添加关键词: 添加 xx xxx\n删除关键词: 删除 xx \n修改关键词: 修改 xx xxx \n当前关键词${keywords
+            ? `回复关键词按照提示即可取资源\n关键词回复\n添加关键词: 添加 xx {售价}\n删除关键词: 删除 xx \n当前资源关键词: \n${keywords
                 .map((k) => k.keyword)
-                .join(", ")}`
-            : `当前关键词\n${keywords.map((k) => k.keyword).join(", ")}`
+                .join("\n")}`
+            : `**回复关键词按照提示即可取资源，\n当前资源关键词: \n${keywords
+                .map((k) => k.keyword)
+                .join("\n")}\n`
         )
       );
       break;

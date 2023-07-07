@@ -2,13 +2,17 @@ import { Schema, model } from "mongoose";
 
 type Keywords = {
   keyword: string;
-  keywordReply: string;
+  usage: "file";
+  filePath: string;
   time?: Date;
+  price: number;
 };
 
 const keywordSchema = new Schema<Keywords>({
   keyword: { type: String, unique: true, required: true },
-  keywordReply: { type: String, required: true },
+  usage: { type: String, default: "file" },
+  filePath: String,
+  price: { type: Number, required: true, default: 0 },
   time: {
     type: Date,
     default: () => {
@@ -18,7 +22,9 @@ const keywordSchema = new Schema<Keywords>({
 });
 
 export const keywordModel = model("Keyword", keywordSchema);
-export const keywordCreate = async (keyword: Keywords) => {
+export const keywordCreate = async (
+  keyword: Pick<Keywords, "keyword" | "filePath"| "price">
+) => {
   return await keywordModel.create({ ...keyword });
 };
 
@@ -35,13 +41,4 @@ export async function QueryByKeyword(keyword: string) {
 
 export async function QueryAndDel(keyword: string) {
   return await keywordModel.findOneAndDelete({ keyword }).exec();
-}
-
-export async function QueryAndUpdate(keyword: string, keywordReply: string) {
-  await keywordModel
-    .findOneAndUpdate(
-      { keyword },
-      { keyword: keyword, keywordReply: keywordReply }
-    )
-    .exec();
 }

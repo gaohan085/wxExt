@@ -9,3 +9,5 @@ WxExtApp.exe
 *.log
 cash-t.ts
 *.zip
+.nyc_output
+coverage

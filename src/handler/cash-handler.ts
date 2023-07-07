@@ -1,8 +1,11 @@
+import "dotenv/config";
 import { XMLParser } from "fast-xml-parser";
-import { ObjType } from "../app";
-import { Method } from "../method";
 import * as database from "../../database";
 import { log } from "../../lib";
+import { ObjType } from "../app";
+import { Method } from "../method";
+
+const archievePath = process.env.ARCHIEVE_PATH as string;
 
 export type cashXMLtype = {
   "?xml": string;
@@ -54,13 +57,32 @@ export async function cashHandler(
         .slice(feedesc.indexOf("￥") + 1)
         .replaceAll(",", "");
 
+      const lastMsg = (
+        await database.model.msg.MsgModel.find({
+          fromid: obj.data?.fromid as string,
+        }).exec()
+      )
+        .sort((a, b) => {
+          return a.time.getTime() - b.time.getTime();
+        })
+        .at(-1);
+      log.warn(JSON.stringify(lastMsg));
+
       await database.model.cash.CashAddRecord({
-        payerWxid: obj.data?.fromid as string,
-        payerNickName: obj.data?.nickName as string,
+        wxid: obj.data?.fromid as string,
+        nickName: obj.data?.nickName as string,
         transferMount: Number(feedescNum),
+        usage: lastMsg?.msg as string,
       });
 
       await sendFunc(Method.agreeCash(obj.data?.fromid as string, transferid));
+
+      await sendFunc(
+        Method.sendFile(
+          obj.data?.fromid as string,
+          `${archievePath}${lastMsg?.msg}.zip`
+        )
+      );
     } catch (e) {
       log.error(e as string);
       if (e instanceof TypeError) {

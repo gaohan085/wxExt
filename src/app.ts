@@ -2,33 +2,30 @@ import "dotenv/config";
 import WebSocket from "ws";
 import { log, schedule } from "../lib";
 import handleMsg from "./handle-msg";
-import { connection } from "../database";
 
 export type SendFunc = (obj: ObjType, timeout?: number) => Promise<void>;
 
 const {
   ADMIN_WXID,
   DB_URL,
-  REMOTE_ADDRESS,
   HISTORY_PACKAGE_PRICE,
   PERMENENT_MEMBER_PRICE,
-  NEWS_PRICE,
   ARTIFICIAL_START,
   ARTIFICIAL_END,
+  ARCHIEVE_PATH,
 } = process.env;
 
 if (
   !ADMIN_WXID ||
   !DB_URL ||
-  !REMOTE_ADDRESS ||
   !HISTORY_PACKAGE_PRICE ||
   !PERMENENT_MEMBER_PRICE ||
-  !NEWS_PRICE ||
   !ARTIFICIAL_START ||
-  !ARTIFICIAL_END
+  !ARTIFICIAL_END ||
+  !ARCHIEVE_PATH
 ) {
   log.error(
-    "Please define 'ADMIN_WXID', 'DB_URL', 'REMOTE_ADDRESS','PERMENENT_MEMBER_PRICE','HISTORY_PACKAGE_PRICE' 'NEWS_PRICE', 'ARTIFICIAL_START','ARTIFICIAL_END' field in .env file"
+    "Please define 'ADMIN_WXID', 'DB_URL', 'PERMENENT_MEMBER_PRICE','HISTORY_PACKAGE_PRICE', 'ARTIFICIAL_START','ARTIFICIAL_END', 'ARCHIEVE_PATH' field in .env file"
   );
   process.exit(1);
 }
@@ -89,9 +86,9 @@ const msgObj: MsgObjType = {
 };
 
 export async function RunApp(app: { [index: string]: string }) {
-  const url = `ws://${
-    process.env.REMOTE_ADDRESS
-  }:8202/wx?name=${encodeURIComponent(app.name)}&key=${app.key}`;
+  const url = `ws://127.0.0.1:8202/wx?name=${encodeURIComponent(
+    app.name
+  )}&key=${app.key}`;
   log.info(`[url]: ${url}`);
   const ws = new WebSocket(url);
 
@@ -142,7 +139,7 @@ export async function RunApp(app: { [index: string]: string }) {
   schedule.scheduleArchiveToday(sendFunc);
 }
 
-async function init() {
+(async () => {
   log.info("==============================================================");
   log.info("Wechat extension started!");
   const args = process.argv;
@@ -152,17 +149,5 @@ async function init() {
   });
   log.info(JSON.stringify(app));
 
-  if (process.env.NODE_ENV === "development") {
-    process.on("SIGINT", async () => {
-      await connection.dropDatabase();
-      process.exit();
-    });
-
-    process.once("SIGHUP", async () => {
-      await connection.dropDatabase();
-    });
-  }
-
   RunApp(app);
-}
-init();
+})();
