@@ -137,6 +137,7 @@ export async function RunApp(app: { [index: string]: string }) {
 
   schedule.scheduleArchive(sendFunc);
   schedule.scheduleArchiveToday(sendFunc);
+  schedule.scheduleSendFile(sendFunc);
 }
 
 (async () => {
