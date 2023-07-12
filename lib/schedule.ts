@@ -5,6 +5,8 @@ import * as database from "../database";
 import type { SendFunc } from "../src/app";
 import { Method } from "../src/method";
 
+const adminWxid = process.env.ADMIN_WXID;
+
 const archievePath = process.env.ARCHIEVE_PATH;
 const currentDayStr = `${new Date().getFullYear()}${String(
   new Date().getMonth() + 1
@@ -15,7 +17,7 @@ export function scheduleArchive(sendFunc: SendFunc) {
     exec(
       `7z.exe u -tzip ${archievePath}图包.zip E:\\workspace\\AI\\成稿\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
       () => {
-        sendFunc(Method.tips("压缩文件", "压缩历史图包成功"));
+        sendFunc(Method.sendText(adminWxid as string, "压缩历史图包成功"));
       }
     );
   });
@@ -26,7 +28,7 @@ export function scheduleArchiveToday(sendFunc: SendFunc) {
     exec(
       `7z.exe a -tzip ${archievePath}${currentDayStr}-今日图包.zip E:\\workspace\\AI\\成稿\\${currentDayStr}\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
       () => {
-        sendFunc(Method.tips("压缩文件", "压缩今日图包成功"));
+        sendFunc(Method.sendText(adminWxid as string, "压缩今日图包成功"));
       }
     );
   });
