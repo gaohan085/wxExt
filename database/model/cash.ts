@@ -1,10 +1,7 @@
 import "dotenv/config";
 import { model, Schema } from "mongoose";
-import * as member from "./member";
 
-const { HISTORY_PACKAGE_PRICE, PERMENENT_MEMBER_PRICE } = process.env;
-
-type Cash = {
+export type Cash = {
   wxid: string;
   nickName: string;
   transferMount: number;
@@ -33,22 +30,7 @@ export const CashAddRecord = async (cashRec: Omit<Cash, "time">) => {
     wxid: cashRec.wxid,
     nickName: cashRec.nickName,
     transferMount: cashRec.transferMount,
-    time: new Date(),
     usage: cashRec.usage,
   });
-
-  await member.UpdateMemberRole(cashRec.wxid, {
-    nickName: cashRec.nickName,
-    wxid: cashRec.wxid,
-    role:
-      cashRec.transferMount === Number(PERMENENT_MEMBER_PRICE)
-        ? "onlooker"
-        : cashRec.transferMount === Number(HISTORY_PACKAGE_PRICE)
-        ? "paid member"
-        : cashRec.transferMount === Number(PERMENENT_MEMBER_PRICE)
-        ? "permanent member"
-        : "visitor",
-  });
-
   return;
 };

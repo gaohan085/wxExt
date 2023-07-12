@@ -96,7 +96,7 @@ export async function keyworsHandler(obj: ObjType, sendFunc: SendFunc) {
       await sendFunc(
         Method.sendText(
           obj.data?.fromid as string,
-          `该资源售价为${price},转账后自动发送资源文件。\n注意:\n**不支持红包\n**付款后可不限次数发送关键词获取该资源文件\n**系统按照付款前最后一条消息关键词发送文件，请在付款前不要随意发送消息\n**虚拟产品，因可复制，售出概不退款。`
+          `该资源售价为${price}元,转账后自动发送资源文件。\n注意:\n**不支持红包\n**付款后可不限次数发送关键词获取该资源文件\n**系统按照付款前最后一条消息关键词发送文件，请在付款前不要发送其他无关消息\n**虚拟产品，因可复制，售出概不退款。`
         )
       );
       return;

@@ -25,7 +25,7 @@ const memberSchema = new Schema<MemberInterface>({
 });
 
 export const MemberModel = model("Member", memberSchema);
-export const MemberCreate = async (member: Omit<MemberInterface, "role">) => {
+export const MemberCreate = async (member: MemberInterface) => {
   return await MemberModel.create({ ...member });
 };
 
@@ -35,15 +35,9 @@ export const MemberCreate = async (member: Omit<MemberInterface, "role">) => {
  * @param updater 成员新的角色
  */
 export const UpdateMemberRole = async (
-  //TODO test
-  filter: MemberInterface["wxid"],
-  updater: MemberInterface
+  //DONE test
+  filter?: Partial<MemberInterface>,
+  updater?: MemberInterface
 ) => {
-  await MemberModel.findOneAndUpdate(
-    {
-      wxid: filter,
-    },
-    updater,
-    { upsert: true }
-  ).exec();
+  await MemberModel.findOneAndUpdate(filter, updater, { upsert: true }).exec();
 };

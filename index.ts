@@ -1,7 +1,8 @@
-import { RunApp } from "./src/app";
 import axios from "axios";
-import * as log from "./lib/log";
 import "dotenv/config";
+import * as log from "./lib/log";
+import { RunApp } from "./src/app";
+import * as database from "./database";
 
 (async function () {
   return (
@@ -18,5 +19,16 @@ import "dotenv/config";
     }
     RunApp(app);
     log.info(process.env.NODE_ENV as string);
+
+    if (process.env.NODE_ENV === "development") {
+      process.on("SIGINT", async () => {
+        await database.connection.dropDatabase();
+        process.exit();
+      });
+
+      process.once("SIGHUP", async () => {
+        await database.connection.dropDatabase();
+      });
+    }
   })
   .catch((e) => log.error(JSON.stringify(e)));

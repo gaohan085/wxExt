@@ -51,7 +51,7 @@ export interface ObjType {
   method?: string;
   msg?: string;
   cb?: string;
-  data?: string & { fromid?: string; toid?: string; msg?: string } & {
+  data?: string & { fromid: string; toid: string; msg: string } & {
     [index: string]: string;
   };
   type?: number;
