@@ -4,10 +4,14 @@ import * as database from "../../database";
 import { log } from "../../lib";
 import { ObjType } from "../app";
 import { Method } from "../method";
+import { existsSync } from "node:fs";
+import { exec } from "node:child_process";
 
 const archievePath = process.env.ARCHIEVE_PATH as string;
 const historyPkgPrice = process.env.HISTORY_PACKAGE_PRICE as string;
 const permanentMemPrice = process.env.PERMENENT_MEMBER_PRICE as string;
+const dailyPrice = process.env.DAILY_PRICE as string;
+const imgPath = process.env.IMG_PATH as string;
 
 export type cashXMLtype = {
   "?xml": string;
@@ -76,6 +80,10 @@ export async function cashHandler(
         );
         return;
       } else {
+        const dateStr =
+          /^(19|20\d{2})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$/.exec(
+            lastMsg.msg
+          );
         switch (lastMsg?.msg) {
           case "取图":
             if (Number(historyPkgPrice) !== Number(feedescNum)) {
@@ -165,10 +173,77 @@ export async function cashHandler(
             }
             break;
 
+          case "今日图包":
+            // eslint-disable-next-line no-case-declarations
+            const currentDayStr = `${new Date().getFullYear()}${String(
+              new Date().getMonth() + 1
+            ).padStart(2, "0")}${String(new Date().getDate()).padStart(
+              2,
+              "0"
+            )}`;
+            if (Number(feedescNum) === Number(dailyPrice)) {
+              if (
+                existsSync(`${imgPath}${currentDayStr}`) &&
+                !existsSync(`${archievePath}${currentDayStr}.zip`)
+              ) {
+                exec(
+                  `7z.exe a -tzip ${archievePath}${currentDayStr}.zip ${imgPath}${currentDayStr}\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
+                  async () => {
+                    await sendFunc(
+                      Method.refuseCash(obj.data?.fromid as string, transferid)
+                    );
+                    await database.model.cash.CashAddRecord({
+                      wxid: obj.data?.fromid as string,
+                      nickName: obj.data?.nickName as string,
+                      transferMount: Number(feedescNum),
+                      usage: lastMsg?.msg,
+                    });
+                    sendFunc(
+                      Method.sendFile(
+                        obj.data?.fromid as string,
+                        `${archievePath}${currentDayStr}.zip`
+                      )
+                    );
+                  }
+                );
+              } else if (existsSync(`${archievePath}${currentDayStr}.zip`)) {
+                await sendFunc(
+                  Method.refuseCash(obj.data?.fromid as string, transferid)
+                );
+                await database.model.cash.CashAddRecord({
+                  wxid: obj.data?.fromid as string,
+                  nickName: obj.data?.nickName as string,
+                  transferMount: Number(feedescNum),
+                  usage: lastMsg?.msg,
+                });
+                sendFunc(
+                  Method.sendFile(
+                    obj.data?.fromid as string,
+                    `${archievePath}${currentDayStr}.zip`
+                  )
+                );
+              } else {
+                await sendFunc(
+                  Method.refuseCash(obj.data.fromid as string, transferid)
+                );
+                await sendFunc(Method.sendText(obj.data.fromid, "今日无图包"));
+              }
+            } else {
+              await sendFunc(
+                Method.refuseCash(obj.data.fromid as string, transferid)
+              );
+              await sendFunc(
+                Method.sendText(obj.data.fromid, "请按照提示转账")
+              );
+            }
+            break;
+
           default:
             if (
+              !dateStr &&
               Number(feedescNum) ===
-              (await database.model.keyword.QueryByKeyword(lastMsg?.msg))?.price
+                (await database.model.keyword.QueryByKeyword(lastMsg?.msg))
+                  ?.price
             ) {
               await sendFunc(Method.agreeCash(obj.data?.fromid, transferid));
               await database.model.cash.CashAddRecord({
@@ -180,6 +255,22 @@ export async function cashHandler(
               await sendFunc(
                 Method.sendFile(
                   obj.data?.fromid,
+                  `${archievePath}${lastMsg?.msg}.zip`
+                )
+              );
+            } else if (dateStr && Number(feedescNum) === Number(dailyPrice)) {
+              await sendFunc(
+                Method.agreeCash(obj.data.fromid as string, transferid)
+              );
+              await database.model.cash.CashAddRecord({
+                wxid: obj.data?.fromid,
+                nickName: obj.data?.nickName,
+                transferMount: Number(feedescNum),
+                usage: lastMsg?.msg,
+              });
+              await sendFunc(
+                Method.sendFile(
+                  obj.data.fromid,
                   `${archievePath}${lastMsg?.msg}.zip`
                 )
               );

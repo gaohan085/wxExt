@@ -10,12 +10,15 @@ interface MongooseErrorType extends ErrorConstructor {
 
 const adminWxid = process.env.ADMIN_WXID as string;
 const archievePath = process.env.ARCHIEVE_PATH as string;
+const dailyPrice = process.env.DAILY_PRICE as string;
 
 export async function keyworsHandler(obj: ObjType, sendFunc: SendFunc) {
   const msg = obj.data?.msg as string;
   const keywordAdd = /添加 (.{1,9}) (.{1,9})/.exec(msg);
   const keywordDel = /删除 (.{1,9})/.exec(msg);
   const keywords = await database.model.keyword.keywordModel.find().exec();
+  const keywordDate =
+    /^(19|20\d{2})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$/.exec(msg);
 
   if (keywordAdd) {
     if (obj.data?.fromid === adminWxid && adminWxid) {
@@ -87,7 +90,7 @@ export async function keyworsHandler(obj: ObjType, sendFunc: SendFunc) {
     //查询数据库中有无对应关键词的转账记录
     const transferRec = await database.model.cash.CashModel.findOne({
       wxid: obj.data?.fromid as string,
-      usage: obj.data?.msg,
+      usage: msg,
     }).exec();
     if (!transferRec?.id) {
       const price = keywords.find(
@@ -107,6 +110,37 @@ export async function keyworsHandler(obj: ObjType, sendFunc: SendFunc) {
           `${archievePath}${obj.data?.msg}.zip`
         )
       );
+      return;
+    }
+  }
+
+  if (keywordDate) {
+    const transferRec = await database.model.cash.CashModel.findOne({
+      wxid: obj.data?.fromid as string,
+      usage: msg,
+    }).exec();
+
+    if (!existsSync(`${archievePath}${keywordDate[1]}.zip`)) {
+      //无该日图包
+      await sendFunc(Method.sendText(obj.data?.fromid as string, "无该日图包"));
+      return;
+    } else if (!transferRec?.id) {
+      await sendFunc(
+        Method.sendText(
+          obj.data?.fromid as string,
+          `该资源售价为${dailyPrice}元,转账后自动发送资源文件。\n注意:\n**不支持红包\n**付款后可不限次数发送关键词获取该资源文件\n**系统按照付款前最后一条消息关键词发送文件，请在付款前不要发送其他无关消息\n**虚拟产品，因可复制，售出概不退款。`
+        )
+      );
+
+      return;
+    } else {
+      await sendFunc(
+        Method.sendFile(
+          obj.data?.fromid as string,
+          `${archievePath}${keywordDate[0]}.zip`
+        )
+      );
+
       return;
     }
   }
