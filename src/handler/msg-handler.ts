@@ -39,7 +39,7 @@ export async function msgHandler(
             ? `回复关键词按照提示即可取资源\n关键词回复\n添加关键词: 添加 xx {售价}\n删除关键词: 删除 xx \n当前资源关键词: \n${keywords
                 .map((k) => k.keyword)
                 .join("\n")}`
-            : `*回复【取图】按照提示即可取图\n*回复【永久会员】即可获取永久更新\n回复日期(格式：yyyyMMdd; 例：20230719)即可获取指定日期图包\n*回复关键词按照提示即可取资源，\n当前资源关键词: \n${keywords
+            : `*回复【取图】按照提示即可取图\n*回复【永久会员】即可获取永久更新\n回复日期(格式：yyyyMMdd; 例：20230719)即可获取指定日期图包\n*回复关键词查看价格，按照提示即可取资源，\n当前资源关键词: \n${keywords
                 .map((k) => k.keyword)
                 .join("\n")}\n`
         )
@@ -104,8 +104,11 @@ export async function msgHandler(
         );
       } else {
         await sendFunc(
-          Method.sendText(obj.data.fromid as string, `每日更新价格为${dailyPrice}\n注意:\n**不支持红包\n**系统按照付款前最后一条消息关键词发送文件，请在付款前不要发送其他无关消息\n**虚拟产品，因可复制，售出概不退款。`)
-        )
+          Method.sendText(
+            obj.data.fromid as string,
+            `每日更新价格为${dailyPrice}\n注意:\n**不支持红包\n**系统按照付款前最后一条消息关键词发送文件，请在付款前不要发送其他无关消息\n**虚拟产品，因可复制，售出概不退款。`
+          )
+        );
       }
       break;
 

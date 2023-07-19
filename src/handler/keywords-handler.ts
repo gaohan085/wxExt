@@ -11,6 +11,8 @@ interface MongooseErrorType extends ErrorConstructor {
 const adminWxid = process.env.ADMIN_WXID as string;
 const archievePath = process.env.ARCHIEVE_PATH as string;
 const dailyPrice = process.env.DAILY_PRICE as string;
+const historyPkgPrice = process.env.HISTORY_PACKAGE_PRICE as string;
+const permanentMemberPrice = process.env.PERMENENT_MEMBER_PRICE as string;
 
 export async function keyworsHandler(obj: ObjType, sendFunc: SendFunc) {
   const msg = obj.data?.msg as string;
@@ -145,6 +147,11 @@ export async function keyworsHandler(obj: ObjType, sendFunc: SendFunc) {
     }
   }
 
-  await sendFunc(Method.sendText(obj.data?.fromid as string, "你好"));
+  await sendFunc(
+    Method.sendText(
+      obj.data?.fromid as string,
+      `你好。\n每日更新图包价格为${dailyPrice}\n历史汇总图包价格为${historyPkgPrice}\n永久会员更新价格为${permanentMemberPrice}, 其他资源请发送【帮助】查看关键词`
+    )
+  );
   return;
 }
