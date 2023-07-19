@@ -27,7 +27,7 @@ export function scheduleArchive(sendFunc: SendFunc) {
 export function scheduleArchiveToday(sendFunc: SendFunc) {
   scheduleJob({ hour: 17, minute: 20 }, () => {
     exec(
-      `7z.exe a -tzip ${archievePath}${currentDayStr}.zip ${imgPath}${currentDayStr}\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
+      `7z.exe u -tzip ${archievePath}${currentDayStr}.zip ${imgPath}${currentDayStr}\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
       () => {
         sendFunc(Method.sendText(adminWxid as string, "压缩今日图包成功"));
       }
