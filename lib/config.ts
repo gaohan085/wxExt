@@ -3,7 +3,7 @@ import * as log from "./log";
 
 const adminWxid = process.env.ADMIN_WXID;
 const dbUrl = process.env.DB_URL;
-const historyPkgPrice = process.env.PERMENENT_MEMBER_PRICE;
+const historyPkgPrice = process.env.HISTORY_PACKAGE_PRICE;
 const permenentMemberPrice = process.env.PERMENENT_MEMBER_PRICE;
 const artificialStart = process.env.ARTIFICIAL_START;
 const artificialEnd = process.env.ARTIFICIAL_END;
