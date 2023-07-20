@@ -19,4 +19,6 @@
     ARTIFICIAL_START = "09:00:00" //人工服务开始时间
     ARTIFICIAL_END = "17:30:00" //人工服务结束时间
     ARCHIEVE_PATH = "E:\\\\Archieve\\\\" //压缩文档路径
+    DAILY_PRICE = 0.99 //每日图包价格
+    IMG_PATH = "E:\\workspace\\AI\\成稿\\" // 图片路径
 ```
