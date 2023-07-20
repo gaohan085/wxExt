@@ -1,4 +1,3 @@
-import "dotenv/config";
 import * as database from "../../database";
 import { ObjType } from "../app";
 import { Method } from "../method";

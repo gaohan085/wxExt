@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import "dotenv/config";
 import * as database from "../database";
 import { faker } from "@faker-js/faker";
 

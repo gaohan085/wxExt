@@ -1,5 +1,4 @@
 import axios from "axios";
-import "dotenv/config";
 import * as log from "./lib/log";
 import { RunApp } from "./src/app";
 import * as database from "./database";
