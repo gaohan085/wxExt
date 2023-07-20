@@ -21,10 +21,6 @@ export async function msgHandler(
   await database.model.msg.MsgCreateRec(obj);
   const keywords = await database.model.keyword.keywordModel.find().exec();
 
-  const currentDayStr = `${new Date().getFullYear()}${String(
-    new Date().getMonth() + 1
-  ).padStart(2, "0")}${String(new Date().getDate()).padStart(2, "0")}`;
-
   //如果该用户的对话状态为人工，则取消自动回复
   const dialog = await database.model.dialog.DialogQuery({
     wxid: obj.data?.fromid as string,
@@ -97,8 +93,8 @@ export async function msgHandler(
 
     case "今日图包":
       if (
-        !existsSync(`${imgPath}${currentDayStr}`) &&
-        !existsSync(`${archievePath}${currentDayStr}.zip`)
+        !existsSync(`${imgPath}${lib.dateStr()}`) &&
+        !existsSync(`${archievePath}${lib.dateStr()}.zip`)
       ) {
         await sendFunc(
           Method.sendText(obj.data.fromid as string, "今日无新图。")

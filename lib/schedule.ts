@@ -3,15 +3,12 @@ import { exec } from "node:child_process";
 import * as database from "../database";
 import type { SendFunc } from "../src/app";
 import { Method } from "../src/method";
-import * as lib from "../lib";
+import * as config from "./config";
+import { dateStr } from "./date-str";
 
-const archievePath = lib.config.archievePath,
-  imgPath = lib.config.imgPath,
-  adminWxid = lib.config.adminWxid;
-
-const currentDayStr = `${new Date().getFullYear()}${String(
-  new Date().getMonth() + 1
-).padStart(2, "0")}${String(new Date().getDate()).padStart(2, "0")}`;
+const archievePath = config.archievePath,
+  imgPath = config.imgPath,
+  adminWxid = config.adminWxid;
 
 export function scheduleArchive(sendFunc: SendFunc) {
   scheduleJob({ hour: 17, minute: 15 }, () => {
@@ -27,7 +24,7 @@ export function scheduleArchive(sendFunc: SendFunc) {
 export function scheduleArchiveToday(sendFunc: SendFunc) {
   scheduleJob({ hour: 17, minute: 20 }, () => {
     exec(
-      `7z.exe u -tzip ${archievePath}${currentDayStr}.zip ${imgPath}${currentDayStr}\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
+      `7z.exe u -tzip ${archievePath}${dateStr()}.zip ${imgPath}${dateStr()}\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
       () => {
         sendFunc(Method.sendText(adminWxid as string, "压缩今日图包成功"));
       }
@@ -43,7 +40,7 @@ export function scheduleSendFile(sendFunc: SendFunc) {
 
     permenentMember.forEach(async (p) => {
       await sendFunc(
-        Method.sendFile(p.wxid, `${archievePath}${currentDayStr}.zip`)
+        Method.sendFile(p.wxid, `${archievePath}${dateStr()}.zip`)
       );
     });
   });

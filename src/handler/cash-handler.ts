@@ -72,6 +72,8 @@ export async function cashHandler(
         })
         .at(-1);
 
+      const currDateStr = lib.dateStr();
+
       if (!lastMsg?.msg) {
         await sendFunc(Method.refuseCash(obj.data.fromid, transferid));
         await sendFunc(
@@ -173,20 +175,13 @@ export async function cashHandler(
             break;
 
           case "今日图包":
-            // eslint-disable-next-line no-case-declarations
-            const currentDayStr = `${new Date().getFullYear()}${String(
-              new Date().getMonth() + 1
-            ).padStart(2, "0")}${String(new Date().getDate()).padStart(
-              2,
-              "0"
-            )}`;
             if (Number(feedescNum) === Number(dailyPrice)) {
               if (
-                existsSync(`${imgPath}${currentDayStr}`) &&
-                !existsSync(`${archievePath}${currentDayStr}.zip`)
+                existsSync(`${imgPath}${currDateStr}`) &&
+                !existsSync(`${archievePath}${currDateStr}.zip`)
               ) {
                 exec(
-                  `7z.exe a -tzip ${archievePath}${currentDayStr}.zip ${imgPath}${currentDayStr}\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
+                  `7z.exe a -tzip ${archievePath}${currDateStr}.zip ${imgPath}${currDateStr}\\* "-xr!*.txt" "-xr!成稿视频" "-xr!*.mp4"`,
                   async () => {
                     await sendFunc(
                       Method.refuseCash(obj.data?.fromid as string, transferid)
@@ -200,12 +195,12 @@ export async function cashHandler(
                     sendFunc(
                       Method.sendFile(
                         obj.data?.fromid as string,
-                        `${archievePath}${currentDayStr}.zip`
+                        `${archievePath}${currDateStr}.zip`
                       )
                     );
                   }
                 );
-              } else if (existsSync(`${archievePath}${currentDayStr}.zip`)) {
+              } else if (existsSync(`${archievePath}${currDateStr}.zip`)) {
                 await sendFunc(
                   Method.refuseCash(obj.data?.fromid as string, transferid)
                 );
@@ -213,12 +208,12 @@ export async function cashHandler(
                   wxid: obj.data?.fromid as string,
                   nickName: obj.data?.nickName as string,
                   transferMount: Number(feedescNum),
-                  usage: lastMsg?.msg,
+                  usage: currDateStr,
                 });
                 sendFunc(
                   Method.sendFile(
                     obj.data?.fromid as string,
-                    `${archievePath}${currentDayStr}.zip`
+                    `${archievePath}${currDateStr}.zip`
                   )
                 );
               } else {
