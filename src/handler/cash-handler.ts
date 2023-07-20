@@ -1,17 +1,16 @@
-import "dotenv/config";
 import { XMLParser } from "fast-xml-parser";
+import { exec } from "node:child_process";
+import { existsSync } from "node:fs";
 import * as database from "../../database";
-import { log } from "../../lib";
+import * as lib from "../../lib";
 import { ObjType } from "../app";
 import { Method } from "../method";
-import { existsSync } from "node:fs";
-import { exec } from "node:child_process";
 
-const archievePath = process.env.ARCHIEVE_PATH as string;
-const historyPkgPrice = process.env.HISTORY_PACKAGE_PRICE as string;
-const permanentMemPrice = process.env.PERMENENT_MEMBER_PRICE as string;
-const dailyPrice = process.env.DAILY_PRICE as string;
-const imgPath = process.env.IMG_PATH as string;
+const archievePath = lib.config.archievePath,
+  historyPkgPrice = lib.config.historyPkgPrice,
+  permanentMemPrice = lib.config.permenentMemberPrice,
+  dailyPrice = lib.config.dailyPrice,
+  imgPath = lib.config.imgPath;
 
 export type cashXMLtype = {
   "?xml": string;
@@ -286,7 +285,7 @@ export async function cashHandler(
         return;
       }
     } catch (e) {
-      log.error(e as string);
+      lib.log.error(e as string);
       if (e instanceof TypeError) {
         return;
       }

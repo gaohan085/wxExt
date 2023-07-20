@@ -1,18 +1,18 @@
 import type { ObjType, SendFunc } from "../app";
-import "dotenv/config";
 import * as database from "../../database";
 import { Method } from "../method";
 import { existsSync } from "fs";
+import * as lib from "../../lib";
 
 interface MongooseErrorType extends ErrorConstructor {
   code: number;
 }
 
-const adminWxid = process.env.ADMIN_WXID as string;
-const archievePath = process.env.ARCHIEVE_PATH as string;
-const dailyPrice = process.env.DAILY_PRICE as string;
-const historyPkgPrice = process.env.HISTORY_PACKAGE_PRICE as string;
-const permanentMemberPrice = process.env.PERMENENT_MEMBER_PRICE as string;
+const adminWxid = lib.config.adminWxid,
+  archievePath = lib.config.archievePath,
+  dailyPrice = lib.config.dailyPrice,
+  historyPkgPrice = lib.config.historyPkgPrice,
+  permanentMemberPrice = lib.config.permenentMemberPrice;
 
 export async function keyworsHandler(obj: ObjType, sendFunc: SendFunc) {
   const msg = obj.data?.msg as string;
@@ -40,7 +40,7 @@ export async function keyworsHandler(obj: ObjType, sendFunc: SendFunc) {
         } else {
           sendFunc(
             Method.sendText(
-              obj.data.fromid as string,
+              obj.data?.fromid as string,
               `添加关键词失败。关键词对应资源不存在，请检查`
             )
           );

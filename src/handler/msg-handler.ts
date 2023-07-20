@@ -5,13 +5,14 @@ import { Method } from "../method";
 import { artificialHandler } from "./artificial-handler";
 import { keyworsHandler } from "./keywords-handler";
 import { existsSync } from "node:fs";
+import * as lib from "../../lib";
 
-const historyPkgPrice = process.env.HISTORY_PACKAGE_PRICE;
-const permanentMemPrice = process.env.PERMENENT_MEMBER_PRICE as string;
-const imgPath = process.env.IMG_PATH as string;
-const adminWxid = process.env.ADMIN_WXID;
-const archievePath = process.env.ARCHIEVE_PATH as string;
-const dailyPrice = process.env.DAILY_PRICE as string;
+const historyPkgPrice = lib.config.historyPkgPrice,
+  permanentMemPrice = lib.config.permenentMemberPrice,
+  imgPath = lib.config.imgPath,
+  adminWxid = lib.config.adminWxid,
+  archievePath = lib.config.archievePath,
+  dailyPrice = lib.config.dailyPrice;
 
 export async function msgHandler(
   obj: ObjType,

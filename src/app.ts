@@ -1,36 +1,9 @@
-import "dotenv/config";
 import WebSocket from "ws";
 import { log, schedule } from "../lib";
 import handleMsg from "./handle-msg";
 
 export type SendFunc = (obj: ObjType, timeout?: number) => Promise<void>;
 
-const {
-  ADMIN_WXID,
-  DB_URL,
-  HISTORY_PACKAGE_PRICE,
-  PERMENENT_MEMBER_PRICE,
-  ARTIFICIAL_START,
-  ARTIFICIAL_END,
-  ARCHIEVE_PATH,
-  DAILY_PRICE,
-} = process.env;
-
-if (
-  !ADMIN_WXID ||
-  !DB_URL ||
-  !HISTORY_PACKAGE_PRICE ||
-  !PERMENENT_MEMBER_PRICE ||
-  !ARTIFICIAL_START ||
-  !ARTIFICIAL_END ||
-  !ARCHIEVE_PATH ||
-  !DAILY_PRICE
-) {
-  log.error(
-    "Please define 'ADMIN_WXID', 'DB_URL', 'PERMENENT_MEMBER_PRICE','HISTORY_PACKAGE_PRICE', 'ARTIFICIAL_START','ARTIFICIAL_END', 'ARCHIEVE_PATH', 'DAILY_PRICE' field in .env file"
-  );
-  process.exit(1);
-}
 
 interface MsgObjType {
   _id: number;

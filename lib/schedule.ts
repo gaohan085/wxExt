@@ -1,14 +1,14 @@
-import "dotenv/config";
 import { scheduleJob } from "node-schedule";
 import { exec } from "node:child_process";
 import * as database from "../database";
 import type { SendFunc } from "../src/app";
 import { Method } from "../src/method";
+import * as lib from "../lib";
 
-const adminWxid = process.env.ADMIN_WXID;
-const imgPath = process.env.IMG_PATH;
+const archievePath = lib.config.archievePath,
+  imgPath = lib.config.imgPath,
+  adminWxid = lib.config.adminWxid;
 
-const archievePath = process.env.ARCHIEVE_PATH;
 const currentDayStr = `${new Date().getFullYear()}${String(
   new Date().getMonth() + 1
 ).padStart(2, "0")}${String(new Date().getDate()).padStart(2, "0")}`;

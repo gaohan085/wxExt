@@ -2,6 +2,10 @@ import { scheduleJob } from "node-schedule";
 import * as database from "../../database";
 import type { ObjType, SendFunc } from "../app";
 import { Method } from "../method";
+import * as lib from "../../lib";
+
+const startTime = lib.config.artificialStart,
+  endTime = lib.config.artificialEnd;
 
 export async function artificialHandler(obj: ObjType, sendFunc: SendFunc) {
   const timeNow = new Date(),
@@ -10,8 +14,7 @@ export async function artificialHandler(obj: ObjType, sendFunc: SendFunc) {
   const currDate = `${currTime.getFullYear()}-${String(
     currTime.getMonth() + 1
   ).padStart(2, "0")}-${currTime.getDate()}`;
-  const startTime = process.env.ARTIFICIAL_START as string;
-  const endTime = process.env.ARTIFICIAL_END as string;
+
   const queueLength = await database.model.dialog.DialogQueueLength();
 
   if (
