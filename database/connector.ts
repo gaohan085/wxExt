@@ -1,11 +1,9 @@
 import "dotenv/config";
 import mongoose from "mongoose";
-import * as log from "../lib/log";
-
-const dbUrl = process.env.DB_URL;
+import * as lib from "../lib";
 
 mongoose.connect(
-  `${dbUrl as string}${
+  `${lib.config.dbUrl as string}${
     process.env.NODE_ENV === "test" ? Math.floor(Math.random() * 1000) : ""
   }`
 );
@@ -19,10 +17,10 @@ switch (process.env.NODE_ENV) {
 const connection = mongoose.connection;
 
 connection.once("open", () => {
-  log.warn("MongoDB connection established!");
+  lib.log.warn("MongoDB connection established!");
 });
 connection.on("error", (e) => {
-  log.warn(e);
+  lib.log.warn(e);
   process.exit(1);
 });
 
